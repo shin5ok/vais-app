@@ -1,0 +1,42 @@
+{
+  "name": "Ubuntu Dev Container",
+  // Dockerfile を使ってビルドするように変更
+  "build": {
+    "dockerfile": "./Dockerfile",
+    "context": "."
+  },
+  "workspaceMount": "source=${localEnv:HOME}/repos,target=/home/kawanos/repos,type=bind,consistency=cached",
+  "workspaceFolder": "/home/kawanos/repos/${localWorkspaceFolderBasename}",
+  // その他のローカル設定をマウント
+  "mounts": [
+    "source=${localEnv:HOME}/.config/gcloud,target=/home/kawanos/.config/gcloud,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gemini,target=/home/kawanos/.gemini,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude,target=/home/kawanos/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude.json,target=/home/kawanos/.claude.json,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.bashrc-params,target=/home/kawanos/.bashrc-params,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.tmux.conf,target=/home/kawanos/.tmux.conf,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/kawanos/.gitconfig,type=bind,consistency=cached"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": "false"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        "MS-CEINTL.vscode-language-pack-ja",
+        "donjayamanne.githistory",
+        "eamodio.gitlens"
+      ]
+    }
+  },
+  // コンテナ起動時のユーザーを kawanos に設定
+  "remoteUser": "kawanos"
+}

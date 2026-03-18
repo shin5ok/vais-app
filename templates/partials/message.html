@@ -1,0 +1,18 @@
+<div class="message user-message">
+    <div class="message-content">{{ user_message }}</div>
+</div>
+<div class="message assistant-message">
+    <div class="message-content">{{ assistant_message | safe }}</div>
+    {% if citations %}
+    <div class="citations">
+        <div class="citations-header">参照元</div>
+        <ul class="citations-list">
+            {% for citation in citations %}
+            <li>
+                <a href="{{ citation.uri }}" target="_blank" rel="noopener noreferrer">{{ citation.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>

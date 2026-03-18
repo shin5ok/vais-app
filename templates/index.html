@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertex AI Search</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Vertex AI Search</h1>
+            <button
+                class="clear-btn"
+                hx-delete="/chat"
+                hx-target="#chat-messages"
+                hx-swap="innerHTML"
+            >
+                Clear
+            </button>
+        </header>
+
+        <main class="chat-container">
+            <div id="chat-messages" class="messages"></div>
+            <div id="thinking-indicator" class="message assistant-message thinking" style="display: none;">
+                <div class="thinking-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </main>
+
+        <footer class="input-area">
+            <form
+                id="chat-form"
+                hx-post="/chat"
+                hx-target="#chat-messages"
+                hx-swap="beforeend"
+                hx-indicator="#thinking-indicator"
+                hx-on::before-request="document.getElementById('thinking-indicator').style.display = 'flex'; document.getElementById('chat-messages').appendChild(document.getElementById('thinking-indicator'));"
+                hx-on::after-request="this.reset(); document.getElementById('thinking-indicator').style.display = 'none'; document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;"
+            >
+                <div class="input-wrapper">
+                    <input
+                        type="text"
+                        name="message"
+                        placeholder="Enter your question..."
+                        autocomplete="off"
+                        required
+                    >
+                    <button type="submit" class="send-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </footer>
+    </div>
+</body>
+</html>

@@ -3,7 +3,11 @@
   // Dockerfile を使ってビルドするように変更
   "build": {
     "dockerfile": "./Dockerfile",
-    "context": "."
+    "context": ".",
+    "args": {
+      "HOST_UID": "${localEnv:UID}",
+      "HOST_GID": "${localEnv:GID}"
+    }
   },
   "workspaceMount": "source=${localEnv:HOME}/repos,target=/home/kawanos/repos,type=bind,consistency=cached",
   "workspaceFolder": "/home/kawanos/repos/${localWorkspaceFolderBasename}",
@@ -38,5 +42,7 @@
     }
   },
   // コンテナ起動時のユーザーを kawanos に設定
-  "remoteUser": "kawanos"
+  "remoteUser": "kawanos",
+  // マウントされたファイルのオーナーを kawanos に修正（ホスト側 UID 502 対策）
+  "postStartCommand": "sudo chown -R kawanos:kawanos /home/kawanos/.gemini /home/kawanos/.claude /home/kawanos/.claude.json /home/kawanos/.bashrc-params /home/kawanos/.tmux.conf /home/kawanos/.gitconfig || true"
 }

@@ -2,8 +2,10 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
 ARG USERNAME=kawanos
+ARG HOST_UID=502
+ARG HOST_GID=502
 
-# 1. ユーザーの調整 (kawanos の作成)
+# 1. ユーザーの調整 (kawanos の作成、ホスト側の UID/GID に合わせる)
 RUN <<EOF
     if id -u vscode >/dev/null 2>&1; then
         usermod -l ${USERNAME} vscode
@@ -12,6 +14,10 @@ RUN <<EOF
     else
         useradd -m -s /bin/bash ${USERNAME}
     fi
+    # ホスト側の UID/GID に合わせる
+    groupmod -g ${HOST_GID} ${USERNAME}
+    usermod -u ${HOST_UID} -g ${HOST_GID} ${USERNAME}
+    chown -R ${HOST_UID}:${HOST_GID} /home/${USERNAME}
     echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME}
     chmod 0440 /etc/sudoers.d/${USERNAME}
 EOF

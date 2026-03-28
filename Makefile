@@ -5,6 +5,8 @@ PROJECT_NUMBER  ?= $(shell gcloud projects describe $(PROJECT_ID) --format="valu
 REGION          ?= asia-northeast1
 SERVICE_NAME    ?= vais-app
 IMAGE_NAME      ?= gcr.io/$(PROJECT_ID)/$(SERVICE_NAME)
+DATASTORE_ID    ?= $(VERTEX_AI_SEARCH_DATASTORE_ID)
+SEARCH_LOCATION ?= $(VERTEX_AI_SEARCH_LOCATION)
 
 install:
 	uv sync
@@ -26,7 +28,7 @@ deploy:
 		--region $(REGION) \
 		--no-allow-unauthenticated \
 		--iap \
-		--set-env-vars "GOOGLE_CLOUD_PROJECT=$(PROJECT_ID)"
+		--set-env-vars "GOOGLE_CLOUD_PROJECT=$(PROJECT_ID),VERTEX_AI_SEARCH_DATASTORE_ID=$(DATASTORE_ID),VERTEX_AI_SEARCH_LOCATION=$(SEARCH_LOCATION)"
 	@echo "Granting invoker permission to IAP service agent..."
 	gcloud run services add-iam-policy-binding $(SERVICE_NAME) \
 		--region=$(REGION) \

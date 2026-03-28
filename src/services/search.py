@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
+from urllib.parse import quote
 from google.cloud import discoveryengine_v1 as discoveryengine
 
 
@@ -148,8 +149,10 @@ class SearchService:
 
     def _convert_gs_to_https(self, uri: str) -> str:
         if uri.startswith("gs://"):
-            # gs://bucket-name/path -> https://storage.googleapis.com/bucket-name/path
-            return uri.replace("gs://", "https://storage.googleapis.com/", 1)
+            # gs://bucket-name/path -> https://storage.cloud.google.com/bucket-name/path
+            # パス部分にスペースや日本語が含まれる場合を考慮してエンコードする
+            path = uri[5:]
+            return f"https://storage.cloud.google.com/{quote(path, safe='/')}"
         return uri
 
     def _extract_citations(self, response) -> list[Citation]:

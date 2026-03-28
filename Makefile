@@ -26,7 +26,6 @@ deploy:
 		--region $(REGION) \
 		--no-allow-unauthenticated \
 		--iap \
-		--command="uvicorn src.main:app --host 0.0.0.0 --port 8080" \
 		--set-env-vars "GOOGLE_CLOUD_PROJECT=$(PROJECT_ID)"
 	@echo "Granting invoker permission to IAP service agent..."
 	gcloud run services add-iam-policy-binding $(SERVICE_NAME) \
